@@ -1,0 +1,49 @@
+>>> If you aren't using vagrant, just run provision.ps1 and skip the below steps <<<
+
+**********************
+*  Why use vagrant?  *
+**********************
+
+1. Full automation of dev setup
+   - Download a fresh Windows 10 base VM and provision it all with one command
+   - Configure your VM settings in one place with a Vagrantfile
+2. Consistency & predictability
+   - After provisioning, all developers will be in the same exact initial state
+   - Easy to reliably reproduce errors across builds
+   - High chance your tested build will succeed on an official builder that is also using vagrant
+3. Portability
+   - Easy to share dev boxes without sending large amounts of data
+
+**************************
+*  Setting up your host  *
+**************************
+
+1.  Download vagrant directly from their site. The version on apt-get isn't as stable.
+2.  Download the latest virtualbox. Again, do it directly from their site.
+3a. Add the following lines to your ~/.ssh/config file to forward your ssh agent to your box:
+
+    Host 127.0.0.1
+        ForwardAgent yes
+
+3b. Run ssh-add to make sure your ssh setup is up to date.
+
+***************************
+*  Setting up your guest  *
+***************************
+
+1. Edit the Guest VM Modifications portion of the Vagrantfile to your liking. These are basically just the VirtualBox settings.
+   NOTE: there are many more configuration options available. See the vagrant docs for more: https://www.vagrantup.com/docs/virtualbox/
+2. Run 'vagrant up' in the top-level directory. This will download the base box, set up your environment, and download any dependencies you need for a build. The whole step will take between 30 minutes and an hour to complete.
+3. Username and password to VM are both 'vagrant'
+
+****************************
+*  Basic vagrant commands  *
+****************************
+
+- vagrant up: start VM & provision if unprovisioned
+- vagrant provision: force-rerun provisioning steps
+- vagrant halt: stop VM
+- vagrant reload: restart VM
+- vagrant destroy: delete VM
+- Other commands can be found in 'vagrant --help' menu
+

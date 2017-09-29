@@ -1,0 +1,50 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  # Define the OS type and default communication protocol
+  config.vm.guest = :windows
+  config.vm.communicator = "winrm"
+
+  # Give your VM an increased 10 minute boot/halt timeout so that vagrant
+  # doesn't force kill your box while Windows runs its long, spontaneous updates
+  config.vm.boot_timeout = 600
+  config.vm.graceful_halt_timeout = 600
+
+  # Connect our box over the local network (in this case, "public" essentially means "bridged")
+  # IP determined by DHCP
+  config.vm.network "public_network"
+
+  # Enable connections over RDP (port 3389) and WinRM (port 5985)
+  config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp"
+  config.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+
+  # Tell vagrant where to pull the starting box
+  # This is just a Windows 10 fresh install with some vagrant-specific tweaks
+  config.vm.box = "ntsirak1/winbuilder-w10-base"
+  config.vm.box_version = "1.1.0"
+
+  # ************************************
+  # ** Guest VM modifications go here **
+  # ************************************
+  config.vm.provider "virtualbox" do |vb|
+    # Give the VM a distinct name in VirtualBox
+    vb.name = "W10-DevBox"
+
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = true
+  
+    # Customize the amount of memory on the VM:
+    vb.memory = "4096"
+  end
+
+  # Allow VM to access git without setting up SSH key by using the host's SSH agent
+  config.ssh.forward_agent = true
+  config.ssh.private_key_path = ["~/.vagrant.d/insecure_private_key", "~/.ssh/id_rsa"]
+
+  # Provision the VM
+  # Set a VAGRANT environment variable to make the script aware that it's running in vagrant
+  config.vm.provision "shell", path: "provision.ps1", env: {"VAGRANT" => true}
+  
+end
