@@ -80,7 +80,9 @@ def main():
               'xenvbd': 'git://xenbits.xen.org/pvdrivers/win/xenvbd.git',
               'xenvif': 'git://xenbits.xen.org/pvdrivers/win/xenvif.git',
               'xenvkbd': 'git://xenbits.xen.org/pvdrivers/win/xenvkbd.git',
-              'xenvusb': 'ssh://github.com/cjp256/xenvusb.git' }
+              'xenvusb': 'ssh://github.com/cjp256/xenvusb.git',
+              'xenusbdevice': 'ssh://github.com/cjp256/xenusbdevice.git'
+              }
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hr:", ["help", "repo="])
